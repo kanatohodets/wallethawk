@@ -1,0 +1,6 @@
+{
+  db: {
+    "location": "db/",
+    "name": "wallethawk.db"
+  }
+}
