@@ -1,3 +1,5 @@
+BEGIN TRANSACTION;
+
 CREATE TABLE IF NOT EXISTS user (
   user_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
   email TEXT NOT NULL
@@ -5,7 +7,9 @@ CREATE TABLE IF NOT EXISTS user (
 
 CREATE TABLE IF NOT EXISTS line_item (
   line_item_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-  date_created INTEGER NOT NULL DEFAULT datetime('now', 'unixepoch'),
+  user_id INTEGER NOT NULL,
+  date_created INTEGER NOT NULL DEFAULT (DATETIME('now', 'unixepoch')),
+  date_modified INTEGER NOT NULL DEFAULT (DATETIME('now', 'unixepoch')),
   description TEXT NOT NULL,
   amount INTEGER NOT NULL,
   category_id INTEGER NOT NULL,
@@ -14,9 +18,18 @@ CREATE TABLE IF NOT EXISTS line_item (
   FOREIGN KEY(category_id) REFERENCES category(category_id)
 );
 
+DROP TABLE IF EXISTS category;
 CREATE TABLE IF NOT EXISTS category (
   category_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
   name TEXT NOT NULL
 );
 
+INSERT INTO category (name) VALUES ("groceries");
+INSERT INTO category (name) VALUES ("work expenses");
+INSERT INTO category (name) VALUES ("entertainment");
+INSERT INTO category (name) VALUES ("paychecks");
+INSERT INTO category (name) VALUES ("rent");
+INSERT INTO category (name) VALUES ("utilities");
+INSERT INTO category (name) VALUES ("restaurants");
 
+END TRANSACTION;

@@ -1,2 +1,4 @@
 public/components/*
 node_modules/*
+db/*.db
+config/runtime.json
