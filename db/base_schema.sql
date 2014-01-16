@@ -8,8 +8,8 @@ CREATE TABLE IF NOT EXISTS user (
 CREATE TABLE IF NOT EXISTS line_item (
   line_item_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
   user_id INTEGER NOT NULL,
-  date_created INTEGER NOT NULL DEFAULT (DATETIME('now', 'unixepoch')),
-  date_modified INTEGER NOT NULL DEFAULT (DATETIME('now', 'unixepoch')),
+  date_created INTEGER NOT NULL DEFAULT (strftime('%s', 'now')),
+  date_modified INTEGER NOT NULL DEFAULT (strftime('%s', 'now')),
   description TEXT NOT NULL,
   amount INTEGER NOT NULL,
   category_id INTEGER NOT NULL,

@@ -5,30 +5,46 @@ var Ledger = function (app) {
   Categories.load(function (categories) {
     var lineItems = new LineItems(categories);
 
-    // grab a user's ledger, a collection of 
+    // grab a user's ledger, a collection of
     // LineItems.
-    app.get('/ledger', function (req, res) {
-      var details = req.body || {};
+    app.get('/api/ledger/:id', function (req, res) {
+      var userID = req.params.id || null;
+      var details = {userID: userID};
       lineItems.fetchAll(details, function (lineItems) {
-        console.log(lineItems);
         res.json(lineItems);
       });
     });
 
     // create a new line item
-    app.post('/ledger', function (req, res) {
-      lineItems.create(details, function (lineItemID) {
-        res.json({lineItemID: lineItemID});
-      });
+    app.post('/api/ledger/:userID', function (req, res) {
+      console.log(req.body);
+      var userID = req.params.userID;
+      console.log(userID);
+      if (userID) {
+        var details = req.body || {};
+        details.userID = userID;
+        lineItems.create(details, function (err, lineItemID) {
+          if (err) {
+            res.send(err.toString(), 400);
+          }
+          res.json({lineItemID: lineItemID});
+        });
+      } else {
+        res.send("must specify user ledger", 400);
+      }
     });
 
     // delete a line item
-    app.delete('/ledger/:id', function (req, res) {
+    app.delete('/api/ledger/:userID/:itemID', function (req, res) {
+      var userID = req.params.userID || null;
+      var lineItemID = req.params.itemID || null;
+
       var details = {
-        lineItemID: req.lineItemID
+        userID: userID,
+        lineItemID: lineItemID
       };
 
-      lineItems.delete(details, function (changed) {
+      lineItems.delete(userID, lineItemID, function (changed) {
         if (changed === 1) {
           res.send(200);
         }
