@@ -7,19 +7,30 @@ var express = require('express');
 var routes = require('./routes');
 var http = require('http');
 var path = require('path');
-var persona = require('express-persona');
+var config = require('config');
+
+var port = config.server.port || 3000;
+var appName = config.app.name || 'WalletHawk';
 
 var app = express();
 
 // all environments
-app.set('port', process.env.PORT || 3000);
+app.set('port', port);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
-app.use(express.favicon());
-app.use(express.logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded());
-app.use(express.methodOverride());
+
+app.use(express.logger('dev'))
+  .use(express.json())
+  .use(express.urlencoded())
+  .use(express.methodOverride())
+  .use(express.cookieParser(config.session.secret))
+  .use(express.session({secret: config.session.secret}))
+  .use(express.csrf());
+
+require("express-persona")(app, {
+  audience: "http://localhost:" + port
+});
+
 app.use(app.router);
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -36,9 +47,10 @@ if ('development' == app.get('env')) {
 }
 
 app.get('/', routes.index);
+app.get('/graph', routes.index);
+app.get('/ledger', routes.index);
 require('./routes/api/ledger.js')(app);
-//require('routes/auth/ledger.js')(app);
 
 http.createServer(app).listen(app.get('port'), function(){
-  console.log('WalletHawk server listening on port ' + app.get('port'));
+  console.log(appName + ' server listening on port ' + app.get('port'));
 });

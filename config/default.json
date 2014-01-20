@@ -1,6 +1,14 @@
 {
+  "app": {
+    "name": "wallethawk"
+  },
+  "server": {
+    "port": 3000
+  },
   "db": {
-    "location": "db/",
-    "name": "wallethawk.db"
+    "location": "db/"
+  },
+  "session": {
+    "secret": "!random bytes!"
   }
 }
