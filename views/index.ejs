@@ -4,22 +4,38 @@
 <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
 <!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title></title>
-    <meta name="description" content="">
-    <meta name="viewport" content="width=device-width">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title></title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width">
+  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css">
+  <meta name="_csrf" content="<%=csrfToken%>">
+  <meta name="user" content="<%=userEmail%>">
 </head>
 <body>
 
+  <div class="navbar">
+    <div class="navbar-inner">
+      <a class="brand" href="/">WalletHawk</a>
+      <ul class="nav">
+        <li><a id="ledger" href="/ledger">Ledger View</a></li>
+        <li><a id="chart" href="/chart">Chart View</a></li>
+        <li><a id="auth" href="/">Login</a></li>
+      </ul>
+    </div>
+  </div>
   <div class="container">
-    <h1>WalletHawk</h1>
-    Some content...
+    <div id="app" class="container">
+      foobar
+    </div>
   </div>
 
   <script src="https://login.persona.org/include.js"></script>
   <!-- <script src="app/backbone-comments.js"></script> -->
+  <script>
+    window.bootstrapData = '<%- JSON.stringify(bootstrapData) %>';
+  </script>
   <script data-main="app/config" src="components/requirejs/require.js"></script>
-
 </body>
 </html>
