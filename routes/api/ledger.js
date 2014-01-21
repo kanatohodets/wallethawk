@@ -1,12 +1,12 @@
-var LineItem = require("./../../lib/LineItem.js");
-var Categories = require("./../../lib/Categories.js");
-var Users = require("./../../lib/Users.js");
+var LineItem = require('./../../lib/LineItem.js');
+var Categories = require('./../../lib/Categories.js');
+var Users = require('./../../lib/Users.js');
 
 var Ledger = function (app) {
   Categories.load(function (categories) {
 
-    var lineItem = new LineItem(categories);
-    var users = new Users(lineItem);
+    var lineItemLib = new LineItem(categories);
+    var usersLib = new Users();
 
     /**
      * Turn a credential into a userID for fetching data.
@@ -23,9 +23,9 @@ var Ledger = function (app) {
       if (req.session.email || req.params.key) {
         var credentials = {
           email: req.session.email,
-          key: req.params.key
+          apiKey: req.params.key
         };
-        users.get(credentials, function (userID) {
+        usersLib.get(credentials, function (userID) {
           if (userID) {
             callback(userID);
           } else {
@@ -40,7 +40,7 @@ var Ledger = function (app) {
     // fetch a user's ledger, a collection of line items.
     app.get('/api/ledger', function (req, res) {
       auth(req, res, function (userID) {
-        users.getLedger(userID, function (lineItems) {
+        usersLib.getLedger({userID: userID}, function (lineItems) {
           res.json(lineItems);
         });
       });
@@ -51,7 +51,7 @@ var Ledger = function (app) {
       auth(req, res, function (userID) {
         var details = req.body || {};
         details.userID = userID;
-        lineItem.create(details, function (err, lineItemID) {
+        lineItemLib.create(details, function (err, lineItemID) {
           if (err) {
             res.send(err.toString(), 400);
           }
