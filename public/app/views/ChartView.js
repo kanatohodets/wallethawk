@@ -1,22 +1,14 @@
-define(function(require, exports, module){
+define(function (require, exports, module) {
 
-  var _ = require('underscore');
   var Backbone = require('backbone');
   var moment = require('moment');
   var d3 = require('d3');
 
   module.exports = Backbone.View.extend({
-    bootstrap: function () {
-      // attach to the collection
-    
-    
-    },
+    el: $('#app'),
     render: function () {
-
-
-
-    };
-
+      this.$el.html('<span>this is where the graph will go </span>');
+    }
   });
 
 });
