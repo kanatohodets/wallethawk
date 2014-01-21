@@ -47,8 +47,8 @@ if ('development' == app.get('env')) {
 }
 
 app.get('/', routes.index);
-app.get('/graph', routes.index);
 app.get('/ledger', routes.index);
+app.get('/chart', routes.index);
 require('./routes/api/ledger.js')(app);
 
 http.createServer(app).listen(app.get('port'), function(){
