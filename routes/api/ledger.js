@@ -1,12 +1,13 @@
-var LineItem = require('./../../lib/LineItem.js');
+var LineItemLib = require('./../../lib/LineItem.js');
 var Categories = require('./../../lib/Categories.js');
-var Users = require('./../../lib/Users.js');
+var UsersLib = require('./../../lib/Users.js');
+var ErrorHandler = require('./../../lib/ErrorHandler.js');
 
 var Ledger = function (app) {
   Categories.load(function (categories) {
 
-    var lineItemLib = new LineItem(categories);
-    var usersLib = new Users();
+    var LineItem = new LineItemLib(categories);
+    var Users = new UsersLib();
 
     /**
      * Turn a credential into a userID for fetching data.
@@ -25,11 +26,15 @@ var Ledger = function (app) {
           email: req.session.email,
           apiKey: req.params.key
         };
-        usersLib.get(credentials, function (userID) {
-          if (userID) {
-            callback(userID);
+        Users.get(credentials, function (err, userID) {
+          if (err) {
+            ErrorHandler.warn(res, err);
           } else {
-            res.send(404);
+            if (userID) {
+              callback(userID);
+            } else {
+              res.send(401);
+            }
           }
         });
       } else {
@@ -40,8 +45,12 @@ var Ledger = function (app) {
     // fetch a user's ledger, a collection of line items.
     app.get('/api/ledger', function (req, res) {
       auth(req, res, function (userID) {
-        usersLib.getLedger({userID: userID}, function (lineItems) {
-          res.json(lineItems);
+        Users.getLedger({userID: userID}, function (err, lineItems) {
+          if (err) {
+            ErrorHandler.warn(res, err);
+          } else {
+            res.json(lineItems);
+          }
         });
       });
     });
@@ -51,11 +60,12 @@ var Ledger = function (app) {
       auth(req, res, function (userID) {
         var details = req.body || {};
         details.userID = userID;
-        lineItemLib.create(details, function (err, lineItemID) {
+        LineItem.create(details, function (err, lineItemID) {
           if (err) {
-            res.send(err.toString(), 400);
+            ErrorHandler.warn(res, err);
+          } else {
+            res.json({id: lineItemID});
           }
-          res.json({lineItemID: lineItemID});
         });
       });
     });
@@ -64,12 +74,14 @@ var Ledger = function (app) {
     app.put('/api/ledger/:lineItemID', function (req, res) {
       auth(req, res, function (userID) {
         var details = req.body || {};
+        console.log(details);
         details.userID = userID;
-        lineItem.update(details, function (err, lineItemID) {
+        LineItem.update(details, function (err, rowsChanged) {
           if (err) {
-            res.send(err.toString(), 400);
+            ErrorHandler.warn(res, err);
+          } else {
+            res.send(200);
           }
-          res.json({lineItemID: lineItemID});
         });
       });
     });
@@ -77,16 +89,15 @@ var Ledger = function (app) {
     // delete a line item from the ledger
     app.delete('/api/ledger/:lineItemID', function (req, res) {
       auth(req, res, function (userID) {
-        var lineItemID = req.params.lineItemID || null;
+        var lineItemID = req.params.id || null;
 
-        var details = {
-          userID: userID,
-          lineItemID: lineItemID
-        };
-
-        lineItem.delete(userID, lineItemID, function (changed) {
-          if (changed === 1) {
-            res.send(200);
+        LineItem.delete(userID, lineItemID, function (err, changed) {
+          if (err) {
+            ErrorHandler.warn(res, err);
+          } else {
+            if (changed === 1) {
+              res.send(200);
+            }
           }
         });
       });

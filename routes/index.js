@@ -3,8 +3,9 @@
  * GET home page.
  */
 
-var Users = require('./../lib/Users.js');
-var users = new Users();
+var UsersLib = require('./../lib/Users.js');
+var ErrorHandler = require('./../lib/ErrorHandler.js');
+var Users = new UsersLib();
 
 exports.index = function (req, res) {
   var email = req.session.email;
@@ -16,7 +17,11 @@ exports.index = function (req, res) {
   };
 
   if (email) {
-    users.getLedger({email: email}, function (ledger) {
+    Users.getLedger({email: email}, function (err, ledger) {
+      if (err) {
+        ErrorHandler.warn(res, err);
+        return;
+      }
       renderData.bootstrapData = ledger;
       res.render('index', renderData);
     });
