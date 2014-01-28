@@ -1,18 +1,25 @@
-
 /**
- * Module dependencies.
+ * WalletHawk!
+ *
  */
+
+var config = require('config');
+var fs = require('fs');
+if (!fs.existsSync(config.db.location + config.app.name + ".db")) {
+  console.log("No DB file found - you may need to run scripts/init_db");
+  process.exit(1);
+}
 
 var express = require('express');
 var routes = require('./routes');
 var http = require('http');
 var path = require('path');
-var config = require('config');
 
 var port = config.server.port || 3000;
 var appName = config.app.name || 'WalletHawk';
 
 var app = express();
+
 
 // all environments
 app.set('port', port);
