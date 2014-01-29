@@ -10,6 +10,8 @@
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width">
   <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css">
+  <link rel="stylesheet" href="components/backgrid/lib/backgrid.css">
+  <link rel="stylesheet" href="css/style.css">
   <meta name="_csrf" content="<%=csrfToken%>">
   <meta name="user" content="<%=userEmail%>">
 </head>
@@ -32,7 +34,6 @@
   </div>
 
   <script src="https://login.persona.org/include.js"></script>
-  <!-- <script src="app/backbone-comments.js"></script> -->
   <script>
     window.bootstrapData = '<%- JSON.stringify(bootstrapData) %>';
   </script>

@@ -7,8 +7,7 @@ define(function (require, exports, module) {
   module.exports = Backbone.Model.extend({
     initialize: function () {
       // set server side to allow sessions to continue if the user reloads
-      var userEmail = $('meta[name="user"').attr('content') || null;
-      console.log(userEmail);
+      var userEmail = $('meta[name="user"]').attr('content') || null;
       this.set('loggedIn', !!userEmail);
       navigator.id.watch({
         loggedInUser: userEmail,
