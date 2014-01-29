@@ -1,15 +1,14 @@
 #!/usr/local/bin/node
 
 var fs = require('fs');
-// Need to run from app root dir, else config is unhappy.
-if (process.cwd().search('wallethawk/scripts')) {
+if (process.cwd().match('wallethawk/scripts')) {
+  console.log("looks like the scripts dir, moving up one level so config doesn't complain");
   process.chdir('..');
 }
 var db = require('./../lib/DatabaseConnection.js');
 var async = require('async');
 var program = require('commander');
 var _ = require('lodash');
-
 
 program
   .option('--data', 'Load mock data [db/mock_data.sql]', 'db/mock_data.sql')
