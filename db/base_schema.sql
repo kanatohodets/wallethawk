@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS category (
 );
 
 INSERT INTO category (name) VALUES ("groceries");
-INSERT INTO category (name) VALUES ("work expenses");
+INSERT INTO category (name) VALUES ("work_expenses");
 INSERT INTO category (name) VALUES ("entertainment");
 INSERT INTO category (name) VALUES ("paychecks");
 INSERT INTO category (name) VALUES ("rent");
