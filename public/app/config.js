@@ -10,6 +10,7 @@ require.config({
     tpl: '../components/requirejs-tpl/tpl',
     d3: '../components/d3/d3',
     backgrid: '../components/backgrid/lib/backgrid',
+    MomentCell: '../components/backgrid-moment-cell/backgrid-moment-cell',
     'backbone.localStorage': '../components/backbone.localStorage/backbone.localStorage'
   },
 
@@ -17,6 +18,10 @@ require.config({
     backgrid: {
       deps: ['jquery', 'backbone', 'underscore'],
       exports: 'Backgrid'
+    },
+    MomentCell: {
+      deps: ['jquery', 'backbone', 'underscore', 'backgrid'],
+      exports: 'MomentCell'
     }
   }
 

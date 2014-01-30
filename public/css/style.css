@@ -2,3 +2,50 @@ body {
   padding: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
+
+.form-group {
+  width: 13.8%;
+}
+
+.backgrid .string-cell {
+  text-align:center;
+}
+
+.backgrid .number-cell {
+  text-align:center;
+}
+
+.backgrid .moment-cell {
+  text-align:center;
+}
+
+.backgrid button {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.backgrid {
+  width: 80%;
+
+}
+
+.backgrid th.delete {
+  width: 5%;
+}
+
+.backgrid th.isIncome {
+  width: 1%;
+  text-align: right;
+}
+
+.backgrid th.amount {
+  width: 10%;
+}
+
+.backgrid .description {
+  width: 20%;
+}
+.backgrid .dateCreated {
+  width: 10%;
+}

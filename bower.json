@@ -16,9 +16,11 @@
     "requirejs-tpl": "latest",
     "moment": "~2.1.0",
     "d3": "latest",
-    "backgrid": "0.3.5"
+    "backgrid": "0.3.5",
+    "backgrid-moment-cell": "0.3.5"
   },
   "resolutions": {
-    "jquery": "~2.0.0"
+    "jquery": "~2.0.0",
+    "moment": "~2.1.0"
   }
 }

@@ -1,12 +1,16 @@
 define(function (require, exports, module) {
 
   var Backbone = require('backbone');
+  var moment = require('moment');
   var LineItem = require('models/LineItem');
 
   module.exports = Backbone.Collection.extend({
     initialize: function () {
       this.on("add", function (model) {
         model.save();
+      });
+      this.on("remove", function (model) {
+        model.destroy();
       });
     },
 
@@ -23,9 +27,8 @@ define(function (require, exports, module) {
           amount: data.amount / 1000,
           category: data.category,
           description: data.description,
-          // TODO: deal with dates more consistently. convert here?
-          dateCreated: data.dateCreated,
-          dateModified: data.dateModified,
+          dateCreated: "" + data.dateCreated,
+          dateModified: "" + data.dateModified,
           isIncome: data.isIncome
         });
         models.push(lineItem);

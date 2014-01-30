@@ -7,10 +7,12 @@ define(function (require, exports, module) {
     urlRoot: '/api/ledger',
     initialize: function (attrs) {
       this.on('change', function (model, attrs) {
-        var date = this.get('dateCreated');
-        var jsDate = moment(date).toDate().getTime();
-        this.set('dateCreated', jsDate, {silent: true});
-        this.save();
+        model.set('dateModified', "" + moment().unix(), {silent: true});
+        // no need to save after setting the new ID when hearing back from the
+        // server after creating it.
+        if (!model.changed.id) {
+          this.save();
+        }
       });
     }
   });
