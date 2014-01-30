@@ -71,9 +71,10 @@ var Ledger = function (app) {
     });
 
     // update an existing line item
-    app.put('/api/ledger/:lineItemID', function (req, res) {
+    app.put('/api/ledger/:id', function (req, res) {
       auth(req, res, function (userID) {
         var details = req.body || {};
+        details.id = req.params.id;
         console.log(details);
         details.userID = userID;
         LineItem.update(details, function (err, rowsChanged) {
@@ -87,7 +88,7 @@ var Ledger = function (app) {
     });
 
     // delete a line item from the ledger
-    app.delete('/api/ledger/:lineItemID', function (req, res) {
+    app.delete('/api/ledger/:id', function (req, res) {
       auth(req, res, function (userID) {
         var lineItemID = req.params.id || null;
 
@@ -95,9 +96,7 @@ var Ledger = function (app) {
           if (err) {
             ErrorHandler.warn(res, err);
           } else {
-            if (changed === 1) {
-              res.send(200);
-            }
+            res.send(200);
           }
         });
       });
