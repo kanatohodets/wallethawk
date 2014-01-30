@@ -1,46 +1,27 @@
 #!/usr/local/bin/node
 
-var fs = require('fs');
+var Script = require('./../lib/Script.js');
 if (process.cwd().match('wallethawk/scripts')) {
   console.log("looks like the scripts dir, moving up one level so config doesn't complain");
   process.chdir('..');
 }
-var db = require('./../lib/DatabaseConnection.js');
-var async = require('async');
 var program = require('commander');
-var _ = require('lodash');
 
 program
   .option('--data', 'Load mock data [db/mock_data.sql]', 'db/mock_data.sql')
+  .option('--user [email]', 'Set user email for mock data')
   .parse(process.argv);
 
-var tasks = ['db/base_schema.sql'];
+var script = new Script();
+script.runFile('db/base_schema.sql');
+
 if (program.data) {
-  tasks.push(program.data);
+  script.runFile(program.data);
 }
-var runFile = function (file) {
-  var run = function (callback) {
-    fs.readFile('./' + file, function (err, data) {
-      if (err) {
-        throw new Error(err);
-      }
-      sql = data.toString();
-      console.log(sql);
-      db.exec(sql, function (err) {
-        if (err) {
-          throw new Error(err);
-        }
-        callback(null);
-      });
-    });
-  };
-  return run;
-};
 
-tasks = _.map(tasks, runFile);
-tasks.push(function (err, result) {
-  console.log('all done!');
-  process.exit();
-});
+if (program.user) {
+  var sql = 'UPDATE user set email = "' + program.user + '" where id = 1';
+  script.doQuery(sql);
+}
 
-async.series(tasks);
+script.execute();
