@@ -2,10 +2,9 @@ define(function (require, exports, module) {
 
   var Backbone = require('backbone');
   var Backgrid = require('backgrid');
-  var MomentCell = require('MomentCell');
   var moment = require('moment');
 
-  var DeleteCell = require('views/grid/DeleteCell');
+  var LedgerColumns = require('views/grid/LedgerColumns');
 
   module.exports = Backbone.View.extend({
     el: $('#app'),
@@ -25,54 +24,9 @@ define(function (require, exports, module) {
         ['Work Expenses', 'work_expenses']
       ];
 
-      var columns = [
-        { name: "delete", label: "", cell: DeleteCell},
-        { name: "isIncome", label: "Change",
-          cell: Backgrid.SelectCell.extend({ optionValues: [['+', '+'], ['-', '-']]}),
-          formatter: {
-            fromRaw: function (data, model) {
-              if (!!data) {
-                return '+';
-              } else {
-                return '-';
-              }
-            },
-            toRaw: function (formattedData, model) {
-              if (formattedData == '+') {
-                return 1;
-              }
-              return 0;
-            }
-          }
-        },
-        { name: "amount", label: "Amount", cell: "number"},
-        { name: "description", label: "Description", cell: "string" },
-        { name: "dateCreated", label: "Date",
-          cell: Backgrid.Extension.MomentCell.extend({
-            modelFormat: "X",
-            displayFormat: "MMM-DD-YYYY"})
-        },
-        { name: "dateModified", label: "Updated", editable: false,
-          cell: Backgrid.Extension.MomentCell.extend({
-            formatter: {
-              fromRaw: function (data, model) {
-                data = +data;
-                return moment.unix(data).fromNow();
-              },
-              // not editable, no-op
-              toRaw: function (formattedData, model) { }
-            }
-          })
-        },
-
-        { name: "category", label: "Category",
-          cell: Backgrid.SelectCell.extend({ optionValues: this.options.categories})
-        }
-      ];
-
       self.options.grid = new Backgrid.Grid({
         emptyText: "No data yet!",
-        columns: columns,
+        columns: new LedgerColumns(this.options.categories),
         collection: self.collection
       });
     },
@@ -83,7 +37,9 @@ define(function (require, exports, module) {
       "click #expense": "addExpense",
       "click #income": "addIncome",
       "keydown": function (event) {
-        // enter key
+        // enter key, fake form submit. Unfortunately using a normal form
+        // submit here doesn't allow auto-detection for what kind of line item
+        // it is (expense/income).
         var code = event.keyCode || event.which;
         if (code == 13) {
           var isIncome = this.$('#income').hasClass('btn-primary');
@@ -94,6 +50,10 @@ define(function (require, exports, module) {
       "change select": "updateButtons"
     },
 
+    /**
+     * Change the highlighted submit button (income/expense) based on the
+     * category selected.
+     */
     updateButtons: function (event) {
       var newCategory = this.$('#category').val();
       var $income = this.$('#income');
@@ -117,6 +77,7 @@ define(function (require, exports, module) {
 
     addLineItem: function (event, isIncome) {
       event.preventDefault();
+      // Don't let errors pile up from previous submissions.
       this.dismissErrors();
       var data = this.getNewLineItem();
       if (!data) {
@@ -126,6 +87,9 @@ define(function (require, exports, module) {
       this.collection.add(data);
     },
 
+    /**
+     * Cheapo error "flash"
+     */
     showError: function (message) {
       var self = this;
       var $el = $('<div class="alert alert-warning">' + message + '</div>');
@@ -143,18 +107,21 @@ define(function (require, exports, module) {
       this.$('.alert').remove();
     },
 
+    /**
+     * Validate and extract the form data to create a new line item.
+     */
     getNewLineItem: function () {
       var data = {
-        amount: +this.$('#amount').val(),
+        amount: parseFloat(this.$('#amount').val()),
         dateCreated: moment(this.$('#date').val()),
         description: this.$('#description').val(),
         category: this.$('#category').val(),
       }
 
       var valid = true;
-      if (data.amount <= 0) {
+      if (isNaN(data.amount) || data.amount <= 0) {
         valid = false;
-        this.showError('Check the amount! 0 or less is no good');
+        this.showError('Check the amount! gibberish or <= 0 are no good');
       }
 
       var sanityYear = moment().subtract('years', 50);
@@ -165,7 +132,7 @@ define(function (require, exports, module) {
 
       if (data.description == '') {
         valid = false;
-        this.showError('empty description!');
+        this.showError('Enter a description!');
       }
 
       if (valid) {
@@ -176,7 +143,6 @@ define(function (require, exports, module) {
       return false;
     },
 
-
     render: function () {
       var self = this;
       self.$el.html(self.addLineItemTemplate({
@@ -185,7 +151,6 @@ define(function (require, exports, module) {
         categories: self.options.categories
       }));
 
-      self.$el.append(self.options.grid.render().el);
       // rows re-render on change events, so trigger dateModified changes in
       // order to force updates on moment's fromNow text.
       if (!self.interval) {
@@ -195,7 +160,8 @@ define(function (require, exports, module) {
           });
         }, 1000);
       }
+
+      self.$el.append(self.options.grid.render().el);
     }
   });
-
 });
