@@ -7,7 +7,9 @@ define(function (require, exports, module) {
   module.exports = Backbone.Collection.extend({
     initialize: function () {
       this.on("add", function (model) {
-        model.save();
+        if (model.isNew()) {
+          model.save();
+        }
       });
       this.on("remove", function (model) {
         model.destroy();
