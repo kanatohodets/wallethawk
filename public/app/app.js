@@ -8,16 +8,32 @@ define(function (require, exports, module) {
   var Auth = require('./app/models/auth.js');
   var Ledger = require('./app/collections/ledger.js');
 
-  var $appContainer = $('#app');
+  var $app = $('#app');
 
   var data = JSON.parse(window.bootstrapData);
   var ledger = new Ledger(data, {parse: true});
   var auth = new Auth();
-  var authView = new AuthView({model: auth, ledger: ledger, app: $appContainer});
-
+  var authView = new AuthView({model: auth, ledger: ledger});
   authView.render();
 
+  var chartView = new ChartView({collection: ledger});
+  var ledgerView = new LedgerView({collection: ledger});
+
   module.exports = Backbone.Router.extend({
+    initialize: function () {
+      var self = this;
+      // re-trigger route after log in
+      // TODO: fix this to respect initial entry point and send back there
+      // after logging in
+      self.listenTo(authView, "login", function () {
+        self.navigate('ledger', {trigger: true});
+      });
+
+      self.listenTo(authView, "logout", function () {
+        self.navigate('ledger', {trigger: true});
+      });
+    },
+
     routes: {
       '': 'ledger',
       'ledger': 'ledger',
@@ -26,26 +42,21 @@ define(function (require, exports, module) {
 
     login: function () {
       ledger.reset();
-      $appContainer.html('');
-      console.log('hit sign in to start!');
+      $app.html('log in!');
     },
 
     ledger: function () {
-      var ledgerView = new LedgerView({collection: ledger});
       if (auth.loggedIn()) {
         ledgerView.render();
       } else {
-        ledgerView.remove();
         this.login();
       }
     },
 
     chart: function () {
-      var chartView = new ChartView({collection: ledger});
       if (auth.loggedIn()) {
         chartView.render();
       } else {
-        chartView.remove();
         this.login();
       }
     },

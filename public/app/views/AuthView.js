@@ -11,12 +11,13 @@ define(function (require, exports, module) {
       }
 
       self.listenTo(self.model, 'change:loggedIn', function (authModel, loggedIn) {
-        console.log('loggedIn changed: ', loggedIn);
         if (loggedIn) {
-          self.options.ledger.fetch();
+          self.options.ledger.fetch({success: function () {
+            self.trigger("login");
+          }});
         } else {
           self.options.ledger.reset([]);
-          self.options.app.html('');
+          self.trigger("logout");
         }
         self.render();
       });
