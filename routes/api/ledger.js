@@ -75,7 +75,6 @@ var Ledger = function (app) {
       auth(req, res, function (userID) {
         var details = req.body || {};
         details.id = req.params.id;
-        console.log(details);
         details.userID = userID;
         LineItem.update(details, function (err, rowsChanged) {
           if (err) {
