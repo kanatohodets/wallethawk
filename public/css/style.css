@@ -27,7 +27,6 @@ body {
 
 .backgrid {
   width: 80%;
-
 }
 
 .backgrid th.delete {
@@ -48,4 +47,12 @@ body {
 }
 .backgrid .dateCreated {
   width: 10%;
+}
+
+.navbar {
+  float: left;
+}
+
+.container {
+  padding-top: 15px;
 }
