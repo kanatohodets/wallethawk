@@ -13,8 +13,7 @@
     "lodash": "~1.3.1",
     "requirejs-tpl": "latest",
     "moment": "~2.1.0",
-    "d3": "https://github.com/mbostock/d3/releases/download/v3.4.1/d3.v3.zip",
-    "d3-plugins": "latest",
+    "d3": "latest",
     "backgrid": "0.3.5",
     "backgrid-moment-cell": "0.3.5"
   },

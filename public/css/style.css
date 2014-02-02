@@ -56,3 +56,13 @@ body {
 .container {
   padding-top: 15px;
 }
+
+circle,
+path {
+  cursor: pointer;
+}
+
+circle {
+  fill: none;
+  pointer-events: all;
+}

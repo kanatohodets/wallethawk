@@ -8,6 +8,7 @@ require.config({
     backbone: '../components/backbone-amd/backbone',
     moment: '../components/moment/moment',
     tpl: '../components/requirejs-tpl/tpl',
+    d3: '../components/d3/d3',
     backgrid: '../components/backgrid/lib/backgrid',
     MomentCell: '../components/backgrid-moment-cell/backgrid-moment-cell'
   },
@@ -22,4 +23,5 @@ require.config({
       exports: 'MomentCell'
     }
   }
+
 });
