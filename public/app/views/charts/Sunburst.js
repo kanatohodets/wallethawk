@@ -82,8 +82,7 @@ define(function (require, exports, module) {
       function click(d) {
         // fade out all text elements
         textGroup.transition().attr("opacity", 0);
-        // firefox doesn't deal with the opacity, so just hide them. oh well
-        textGroup.transition().attr("hidden", true);
+        textGroup.transition().attr("fill-opacity", 0);
 
         path.transition()
           .duration(750)
@@ -96,6 +95,7 @@ define(function (require, exports, module) {
                 // fade in the text element and recalculate positions
                 arcText.transition().duration(750)
                   .attr("opacity", 1)
+                  .attr("fill-opacity", 1)
                   .attr("hidden", null)
                   .attr("transform", function (e) {
                     return "rotate(" + computeTextRotation(e) + ")";
@@ -103,7 +103,8 @@ define(function (require, exports, module) {
                   .attr("x", function(d) { return y(d.y); });
                 var arcTspan = d3.select(this.parentNode).select("tspan");
                 arcTspan.transition().duration(750)
-                  .attr("opacity", 1);
+                  .attr("opacity", 1)
+                  .attr("fill-opacity", 1);
               }
           });
       }
