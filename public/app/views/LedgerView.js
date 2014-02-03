@@ -85,6 +85,7 @@ define(function (require, exports, module) {
       }
       data.isIncome = +isIncome;
       this.collection.add(data);
+      this.resetForm();
     },
 
     /**
@@ -141,6 +142,13 @@ define(function (require, exports, module) {
       }
 
       return false;
+    },
+
+    resetForm: function () {
+      this.$('#amount').val('');
+      this.$('#date').val('');
+      this.$('#description').val('');
+      this.$('#category').val('');
     },
 
     render: function () {

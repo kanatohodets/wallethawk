@@ -82,6 +82,8 @@ define(function (require, exports, module) {
       function click(d) {
         // fade out all text elements
         textGroup.transition().attr("opacity", 0);
+        // firefox doesn't deal with the opacity, so just hide them. oh well
+        textGroup.transition().attr("hidden", true);
 
         path.transition()
           .duration(750)
@@ -94,6 +96,7 @@ define(function (require, exports, module) {
                 // fade in the text element and recalculate positions
                 arcText.transition().duration(750)
                   .attr("opacity", 1)
+                  .attr("hidden", null)
                   .attr("transform", function (e) {
                     return "rotate(" + computeTextRotation(e) + ")";
                   })
