@@ -1,6 +1,7 @@
 {
   "app": {
-    "name": "wallethawk"
+    "name": "wallethawk",
+    "persona-audience": "localhost"
   },
   "server": {
     "port": 3000

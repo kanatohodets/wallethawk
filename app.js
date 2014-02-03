@@ -34,8 +34,10 @@ app.use(express.logger('dev'))
   .use(express.session({secret: config.session.secret}))
   .use(express.csrf());
 
+
+var personaAudience = config.app.audience || "localhost";
 require("express-persona")(app, {
-  audience: "http://localhost:" + port
+  audience: "http://" + personaAudience + ":" + port
 });
 
 app.use(app.router);

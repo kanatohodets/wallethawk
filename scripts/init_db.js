@@ -1,4 +1,3 @@
-#!/usr/local/bin/node
 
 var Script = require('./../lib/Script.js');
 if (process.cwd().match('wallethawk/scripts')) {
