@@ -14,6 +14,11 @@ define(function (require, exports, module) {
       var y = d3.scale.linear()
           .range([0, radius]);
 
+      var xRect = d3.scale.linear()
+          .range([0, width]);
+      var yRect = d3.scale.linear()
+          .range([0, height]);
+
       var color = d3.scale.category20c();
 
       var svg = d3.select(el).append("svg")
@@ -38,25 +43,45 @@ define(function (require, exports, module) {
       var path = g.append("path")
         .attr("d", arc)
         .style("fill", function(d) { return color((d.children ? d : d.parent).name); })
+        .style("stroke", "#fff")
+        .style("fill-rule", "evenodd")
         .on("click", click);
 
-      var text = g.append("text")
-        .attr("transform", function(d) { return "rotate(" + computeTextRotation(d) + ")"; })
+      var textGroup = g.append("text")
+        .attr("class", "foobar")
+        .attr("transform", function(d) {
+          return "rotate(" + computeTextRotation(d) + ")";
+        })
         .attr("x", function(d) { return y(d.y); })
         .attr("dx", "6") // margin
         .attr("dy", ".35em") // vertical-align
         .append("tspan")
-        .text(function (d) { 
-          if (d.name == 'money') {
-            return '';
+        .text(function (d) {
+          if (d.depth) {
+            return d.name;
           }
-          return d.name + " $" + d.value; 
+          return '';
         })
         .on("click", click);
 
+      textGroup
+        .append("tspan")
+        .attr("dy", "1em")
+        .attr("dx", function (d) {
+          return (-1 * d.name.length / 3) + "em";
+        })
+        .text(function (d) {
+          if (d.depth) {
+            return "$" + d.value;
+          }
+          return '';
+        });
+
+
+
       function click(d) {
         // fade out all text elements
-        text.transition().attr("opacity", 0);
+        textGroup.transition().attr("opacity", 0);
 
         path.transition()
           .duration(750)
@@ -65,13 +90,15 @@ define(function (require, exports, module) {
               // check if the animated element's data e lies within the visible angle span given in d
               if (e.x >= d.x && e.x < (d.x + d.dx)) {
                 // get a selection of the associated text element
-                var arcText = d3.select(this.parentNode).select("text");
+                var arcText = d3.select(this.parentNode).select("text.foobar");
                 // fade in the text element and recalculate positions
                 arcText.transition().duration(750)
                   .attr("opacity", 1)
-                  .attr("transform", function(e) { return "rotate(" + computeTextRotation(e) + ")" })
+                  .attr("transform", function (e) {
+                    return "rotate(" + computeTextRotation(e) + ")";
+                  })
                   .attr("x", function(d) { return y(d.y); });
-                var arcTspan = d3.select(this.parentNode).select("tspan");  
+                var arcTspan = d3.select(this.parentNode).select("tspan");
                 arcTspan.transition().duration(750)
                   .attr("opacity", 1);
               }
