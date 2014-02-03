@@ -5,8 +5,8 @@ define(function (require, exports, module) {
   var LedgerView = require('./app/views/LedgerView.js');
   var ChartView = require('./app/views/ChartView.js');
   var AuthView = require('./app/views/AuthView.js');
-  var Auth = require('./app/models/auth.js');
-  var Ledger = require('./app/collections/ledger.js');
+  var Auth = require('./app/models/Auth.js');
+  var Ledger = require('./app/collections/Ledger.js');
 
   var $app = $('#app');
 
