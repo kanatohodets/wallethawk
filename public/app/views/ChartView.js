@@ -45,8 +45,12 @@ define(function (require, exports, module) {
 
     render: function () {
       this.$el.html('');
-      var chart = new Chart(this.el);
-      chart.render(this.formatLedgerForChart());
+      if (this.collection.length > 0) {
+        var chart = new Chart(this.el);
+        chart.render(this.formatLedgerForChart());
+      } else {
+        this.$el.html('No data yet!');
+      }
     }
   });
 

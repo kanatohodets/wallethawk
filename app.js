@@ -36,8 +36,11 @@ app.use(express.logger('dev'))
 
 
 var personaAudience = config.app.audience || "localhost";
+if (personaAudience == 'localhost') {
+  personaAudience += ':' + port;
+}
 require("express-persona")(app, {
-  audience: "http://" + personaAudience + ":" + port
+  audience: "http://" + personaAudience
 });
 
 app.use(app.router);
