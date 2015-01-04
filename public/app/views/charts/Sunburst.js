@@ -56,6 +56,7 @@ define(function (require, exports, module) {
         .attr("dx", "6") // margin
         .attr("dy", ".35em") // vertical-align
         .append("tspan")
+        .style("pointer-events", "none")
         .text(function (d) {
           if (d.depth) {
             return d.name;

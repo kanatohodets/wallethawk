@@ -17,10 +17,13 @@ define(function (require, exports, module) {
       this.options.categories = [
         ['Groceries', 'groceries'],
         ['Paychecks', 'paychecks'],
-        ['Restraurants', 'restaurants'],
+        ['Restaurants', 'restaurants'],
         ['Entertainment', 'entertainment'],
         ['Rent', 'rent'],
         ['Utilities', 'utilities'],
+        ['Home', 'home'],
+        ['Tech', 'tech'],
+        ['Clothing', 'clothing'],
         ['Work Expenses', 'work_expenses']
       ];
 

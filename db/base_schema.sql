@@ -32,5 +32,8 @@ INSERT INTO category (name) VALUES ("paychecks");
 INSERT INTO category (name) VALUES ("rent");
 INSERT INTO category (name) VALUES ("utilities");
 INSERT INTO category (name) VALUES ("restaurants");
+INSERT INTO category (name) VALUES ("home");
+INSERT INTO category (name) VALUES ("tech");
+INSERT INTO category (name) VALUES ("clothing");
 
 END TRANSACTION;
