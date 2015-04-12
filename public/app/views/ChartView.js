@@ -71,5 +71,5 @@ define(function (require, exports, module) {
       categoryMembers = type[category] = {name: category, children: []};
     }
     categoryMembers.children.push({name: description, size: amount});
-  };
+  }
 });

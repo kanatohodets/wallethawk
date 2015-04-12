@@ -119,8 +119,8 @@ define(function (require, exports, module) {
         amount: parseFloat(this.$('#amount').val()),
         dateCreated: moment(this.$('#date').val()),
         description: this.$('#description').val(),
-        category: this.$('#category').val(),
-      }
+        category: this.$('#category').val()
+      };
 
       var valid = true;
       if (isNaN(data.amount) || data.amount <= 0) {
