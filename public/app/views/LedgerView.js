@@ -140,6 +140,7 @@ define(function (require, exports, module) {
       }
 
       if (valid) {
+        data.dateCreated = data.dateCreated.add('hours', 12);
         data.dateCreated = "" + data.dateCreated.unix();
         return data;
       }
