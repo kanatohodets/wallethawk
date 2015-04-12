@@ -129,7 +129,7 @@ define(function (require, exports, module) {
       }
 
       var sanityYear = moment().subtract('years', 50);
-      if (!data.dateCreated.isValid() || data.dateCreated < sanityYear) {
+      if (typeof(data.dateCreated) == "undefined" || !data.dateCreated.isValid() || data.dateCreated < sanityYear) {
         valid = false;
         this.showError('That date is incomprehensible, or more than 50 years ago.');
       }
