@@ -150,9 +150,9 @@ define(function (require, exports, module) {
 
     resetForm: function () {
       this.$('#amount').val('');
-      this.$('#date').val('');
-      this.$('#description').val('');
-      this.$('#category').val('');
+      this.$('#date').val(moment().format('YYYY-MM-DD'));
+      this.$('#description').val('AH');
+      this.$('#category').val('Groceries');
     },
 
     render: function () {
