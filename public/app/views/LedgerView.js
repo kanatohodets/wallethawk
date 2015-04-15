@@ -119,8 +119,8 @@ define(function (require, exports, module) {
         amount: parseFloat(this.$('#amount').val()),
         dateCreated: moment(this.$('#date').val()),
         description: this.$('#description').val(),
-        category: this.$('#category').val(),
-      }
+        category: this.$('#category').val()
+      };
 
       var valid = true;
       if (isNaN(data.amount) || data.amount <= 0) {
@@ -140,6 +140,7 @@ define(function (require, exports, module) {
       }
 
       if (valid) {
+        data.dateCreated = data.dateCreated.add('hours', 12);
         data.dateCreated = "" + data.dateCreated.unix();
         return data;
       }
@@ -149,9 +150,9 @@ define(function (require, exports, module) {
 
     resetForm: function () {
       this.$('#amount').val('');
-      this.$('#date').val('');
-      this.$('#description').val('');
-      this.$('#category').val('');
+      this.$('#date').val(moment().format('YYYY-MM-DD'));
+      this.$('#description').val('AH');
+      this.$('#category').val('Groceries');
     },
 
     render: function () {

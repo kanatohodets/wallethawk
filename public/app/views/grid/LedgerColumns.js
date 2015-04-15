@@ -17,7 +17,7 @@ define(function (require, exports, module) {
       { name: "dateCreated", label: "Date",
         cell: Backgrid.Extension.MomentCell.extend({
           modelFormat: "X",
-          displayFormat: "MMM-DD-YYYY"})
+          displayFormat: "MM-DD-YY"})
       },
       { name: "dateModified", label: "Updated", editable: false,
         cell: Backgrid.Extension.MomentCell.extend({
