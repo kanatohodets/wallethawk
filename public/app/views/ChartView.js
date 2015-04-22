@@ -44,10 +44,14 @@ define(function (require, exports, module) {
     },
 
     render: function () {
-      this.$el.html('');
+      var template = _.template( $("#search_template").html(), {} );
+      this.$el.html( template );
       if (this.collection.length > 0) {
         var chart = new Chart(this.el);
         chart.render(this.formatLedgerForChart());
+        console.log(this.collection.at(0));
+        this.$("#display_from").val(moment.unix(this.collection.at(this.collection.length - 1).get('dateCreated')).format('YYYY-MM-DD'));
+        this.$("#display_to").val(moment.unix(this.collection.at(0).get('dateCreated')).format('YYYY-MM-DD'));
       } else {
         this.$el.html('No data yet!');
       }
