@@ -58,6 +58,10 @@ body {
   height: 100%;
 }
 
+svg {
+    height: 800px;
+}
+
 circle,
 path {
   cursor: pointer;
