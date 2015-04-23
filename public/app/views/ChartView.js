@@ -55,12 +55,12 @@ define(function (require, exports, module) {
     },
 
     rerenderChart: function () {
-        var earliestMoment = this.$("#display_from").val();
-        var latestMoment = this.$("#display_to").val();
+      var earliestMoment = this.$("#display_from").val();
+      var latestMoment = this.$("#display_to").val();
 
-        this.$('svg').remove();
-        var chart = new Chart(this.el);
-        chart.render(this.formatLedgerForChart(earliestMoment, latestMoment));
+      this.$('svg').remove();
+      var chart = new Chart(this.el);
+      chart.render(this.formatLedgerForChart(earliestMoment, latestMoment));
     },
 
     render: function () {
