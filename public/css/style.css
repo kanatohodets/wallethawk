@@ -59,6 +59,7 @@ body {
 }
 
 svg {
+    margin: 20px;
     height: 800px;
 }
 
