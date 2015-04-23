@@ -8,6 +8,10 @@ define(function (require, exports, module) {
   module.exports = Backbone.View.extend({
     el: $('#app'),
 
+    events: {
+        "click #reset_chart"         : "rerenderChart"
+    },
+
     /**
      * Create a hierarchical representation of the ledger.
      *
@@ -24,10 +28,17 @@ define(function (require, exports, module) {
      *  ]
      * }
      */
-    formatLedgerForChart: function () {
+    formatLedgerForChart: function (earliestMoment, latestMoment) {
+
       var classify = {income: {}, expenses: {}};
 
       this.collection.each(function (lineItem) {
+        var unixDateCreated = lineItem.get('dateCreated');
+        var momentDateCreated = moment.unix(unixDateCreated).format('YYYY-MM-DD');
+
+        if ((momentDateCreated < earliestMoment) || (latestMoment < momentDateCreated)) {
+            return true;
+        }
         var isIncome = lineItem.get("isIncome");
         if (isIncome) {
           addLineItemToHierarchicalLedger(classify.income, lineItem);
@@ -43,22 +54,28 @@ define(function (require, exports, module) {
       return result;
     },
 
+    rerenderChart: function () {
+        var earliestMoment = this.$("#display_from").val();
+        var latestMoment = this.$("#display_to").val();
+
+        this.$('svg').remove();
+        var chart = new Chart(this.el);
+        chart.render(this.formatLedgerForChart(earliestMoment, latestMoment));
+    },
+
     render: function () {
-      var template = _.template( $("#search_template").html(), {} );
+      var template = _.template( $("#date_filter").html(), {} );
       this.$el.html( template );
       if (this.collection.length > 0) {
         this.collection.sort();
 
-        var earliest_moment = getDateFromNthLineItem(this.collection, this.collection.length - 1);
-        var latest_moment = getDateFromNthLineItem(this.collection, 0);
+        var earliestMoment = getDateFromNthLineItem(this.collection, this.collection.length - 1);
+        var latestMoment = getDateFromNthLineItem(this.collection, 0);
 
-        this.$("#display_from").val(earliest_moment);
-        this.$("#display_to").val(latest_moment);
+        this.$("#display_from").val(earliestMoment);
+        this.$("#display_to").val(latestMoment);
 
-        var chart = new Chart(this.el);
-        chart.render(this.formatLedgerForChart());
-        console.log(this.collection.at(0));
-
+        this.rerenderChart();
       } else {
         this.$el.html('No data yet!');
       }
