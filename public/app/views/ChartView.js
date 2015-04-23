@@ -47,11 +47,18 @@ define(function (require, exports, module) {
       var template = _.template( $("#search_template").html(), {} );
       this.$el.html( template );
       if (this.collection.length > 0) {
+        this.collection.sort();
+
+        var earliest_moment = getDateFromNthLineItem(this.collection, this.collection.length - 1);
+        var latest_moment = getDateFromNthLineItem(this.collection, 0);
+
+        this.$("#display_from").val(earliest_moment);
+        this.$("#display_to").val(latest_moment);
+
         var chart = new Chart(this.el);
         chart.render(this.formatLedgerForChart());
         console.log(this.collection.at(0));
-        this.$("#display_from").val(moment.unix(this.collection.at(this.collection.length - 1).get('dateCreated')).format('YYYY-MM-DD'));
-        this.$("#display_to").val(moment.unix(this.collection.at(0).get('dateCreated')).format('YYYY-MM-DD'));
+
       } else {
         this.$el.html('No data yet!');
       }
@@ -76,4 +83,11 @@ define(function (require, exports, module) {
     }
     categoryMembers.children.push({name: description, size: amount});
   }
+
+  function getDateFromNthLineItem (collection, index) {
+      var nthLineItem = collection.at(index);
+      var dateCreated = nthLineItem.get('dateCreated');
+      return moment.unix(dateCreated).format('YYYY-MM-DD');
+  }
+
 });
