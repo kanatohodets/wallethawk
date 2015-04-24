@@ -9,7 +9,8 @@ define(function (require, exports, module) {
     el: $('#app'),
 
     events: {
-        "click #reset_chart"         : "rerenderChart"
+        "click #reset_chart"         : "rerenderChart",
+        "mouseover text"             : "displayText"
     },
 
     /**
@@ -52,6 +53,34 @@ define(function (require, exports, module) {
         result.children.push({name: key, children: _.values(classify[key])});
       }
       return result;
+    },
+
+    showItemDetailTemplate: require("tpl!templates/ShowItemDetailTemplate.ejs"),
+
+    displayText: function(ev) {
+        this.$('#item_explanation_div').remove();
+
+        var re = /(.*)\€(\d+)/;
+        var parsed = $(ev.target).text().match(re);
+        var desc = parsed[1];
+        var amt = parsed[2];
+
+        var item = this.collection.findWhere({description: desc, amount: parseInt(amt)});
+        if ( item ) {
+            var created = moment.unix(item.get('dateCreated')).format('YYYY-MM-DD');
+            var category = item.get('category');
+        }
+        else {
+            var created = "";
+            var category = "";
+        }
+
+        this.$("#date_filter").append( this.showItemDetailTemplate({
+            description: desc,
+            amount: amt,
+            created: created,
+            category: category
+        }) );
     },
 
     rerenderChart: function () {
