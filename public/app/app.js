@@ -10,7 +10,7 @@ define(function (require, exports, module) {
 
   var $app = $('#app');
 
-  var data = JSON.parse(window.bootstrapData);
+  var data = window.bootstrapData;
   var ledger = new Ledger(data, {parse: true});
   var auth = new Auth();
   var authView = new AuthView({model: auth, ledger: ledger});
