@@ -63,17 +63,19 @@ define(function (require, exports, module) {
       chart.render(this.formatLedgerForChart(earliestMoment, latestMoment));
     },
 
+    dateFilterTemplate: require("tpl!templates/DateFilterTemplate.ejs"),
+
     render: function () {
-      var template = _.template( $("#date_filter").html(), {} );
-      this.$el.html( template );
       if (this.collection.length > 0) {
         this.collection.sort();
 
         var earliestMoment = getDateFromNthLineItem(this.collection, this.collection.length - 1);
         var latestMoment = getDateFromNthLineItem(this.collection, 0);
 
-        this.$("#display_from").val(earliestMoment);
-        this.$("#display_to").val(latestMoment);
+        this.$el.html(this.dateFilterTemplate({
+            earliestMoment: earliestMoment,
+            latestMoment: latestMoment
+        }));
 
         this.rerenderChart();
       } else {
