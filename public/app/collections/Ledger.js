@@ -16,6 +16,8 @@ define(function (require, exports, module) {
       });
     },
 
+    comparator: 'date',
+
     model: LineItem,
     url: '/api/ledger',
     parse: function (response) {
