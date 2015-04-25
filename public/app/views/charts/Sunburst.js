@@ -73,7 +73,7 @@ define(function (require, exports, module) {
         })
         .text(function (d) {
           if (d.depth) {
-            return "$" + d.value;
+            return "€" + d.value;
           }
           return '';
         });

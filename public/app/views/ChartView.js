@@ -9,7 +9,8 @@ define(function (require, exports, module) {
     el: $('#app'),
 
     events: {
-        "click #reset_chart"         : "rerenderChart"
+        "click #reset_chart"         : "rerenderChart",
+        "mouseover text"             : "displayText"
     },
 
     /**
@@ -54,6 +55,34 @@ define(function (require, exports, module) {
       return result;
     },
 
+    showItemDetailTemplate: require("tpl!templates/ShowItemDetailTemplate.ejs"),
+
+    displayText: function(ev) {
+        this.$('#item_explanation_div').remove();
+
+        var re = /(.*)\€(\d+)/;
+        var parsed = $(ev.target).text().match(re);
+        var desc = parsed[1];
+        var amt = parsed[2];
+
+        var item = this.collection.findWhere({description: desc, amount: parseInt(amt)});
+        if ( item ) {
+            var created = moment.unix(item.get('dateCreated')).format('YYYY-MM-DD');
+            var category = item.get('category');
+        }
+        else {
+            var created = "";
+            var category = "";
+        }
+
+        this.$("#date_filter").append( this.showItemDetailTemplate({
+            description: desc,
+            amount: amt,
+            created: created,
+            category: category
+        }) );
+    },
+
     rerenderChart: function () {
       var earliestMoment = this.$("#display_from").val();
       var latestMoment = this.$("#display_to").val();
@@ -63,17 +92,19 @@ define(function (require, exports, module) {
       chart.render(this.formatLedgerForChart(earliestMoment, latestMoment));
     },
 
+    dateFilterTemplate: require("tpl!templates/DateFilterTemplate.ejs"),
+
     render: function () {
-      var template = _.template( $("#date_filter").html(), {} );
-      this.$el.html( template );
       if (this.collection.length > 0) {
         this.collection.sort();
 
         var earliestMoment = getDateFromNthLineItem(this.collection, this.collection.length - 1);
         var latestMoment = getDateFromNthLineItem(this.collection, 0);
 
-        this.$("#display_from").val(earliestMoment);
-        this.$("#display_to").val(latestMoment);
+        this.$el.html(this.dateFilterTemplate({
+            earliestMoment: earliestMoment,
+            latestMoment: latestMoment
+        }));
 
         this.rerenderChart();
       } else {

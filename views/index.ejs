@@ -28,20 +28,13 @@
     </div>
   </div>
   <div class="container col-md-10">
-    <script type="text/template" id="date_filter">
-        <label>Filter by date: </label>
-        <br>
-        From <input type="date" id="display_from" />
-         to <input type="date" id="display_to" />
-        <input type="button" id="reset_chart" value="Update" />
-    </script>
     <div id="app" class="container">
     </div>
   </div>
 
   <script src="https://login.persona.org/include.js"></script>
   <script>
-    window.bootstrapData = '<%- JSON.stringify(bootstrapData) %>';
+    window.bootstrapData = <%- JSON.stringify(bootstrapData) %>;
   </script>
   <script data-main="app/config" src="components/requirejs/require.js"></script>
 </body>
